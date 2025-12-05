@@ -198,7 +198,9 @@ Current security implementations:
 **Required for production:**
 - ❌ **Authentication and authorization** - Admin routes are currently unprotected
 - ❌ **JWT tokens or session management** - No user authentication implemented
-- ❌ **Rate limiting** - API endpoints can be abused without limits
+- ❌ **Rate limiting** - API endpoints can be abused without limits (⚠️ CodeQL Alert)
+  - Consider using `express-rate-limit` package
+  - Example: Limit to 100 requests per 15 minutes per IP
 - ❌ **HTTPS/SSL certificates** - Deploy with secure connections
 - ❌ **CORS configuration** - Currently allows all origins
 - ❌ **Database access controls** - Secure MongoDB with authentication
@@ -206,6 +208,9 @@ Current security implementations:
 - ❌ **Input sanitization library** - Consider using libraries like DOMPurify or validator.js
 - ❌ **SQL/NoSQL injection prevention** - While using Mongoose helps, add additional validation
 - ❌ **CSRF protection** - Add CSRF tokens for state-changing operations
+
+### Security Summary
+This application includes basic security measures suitable for demonstration purposes. A CodeQL security scan identified 13 alerts related to missing rate limiting on API routes and file system access. These are expected in a demo application but **must be addressed before production deployment**.
 
 ## Future Enhancements
 
