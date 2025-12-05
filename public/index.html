@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restro - Order Your Food</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🍽️ Restro</h1>
+            <p class="tagline">Delicious food at your fingertips</p>
+            <nav>
+                <a href="/" class="active">Menu</a>
+                <a href="/admin">Admin</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Category Filter -->
+        <div class="category-filter">
+            <button class="filter-btn active" data-category="all">All</button>
+            <button class="filter-btn" data-category="appetizer">Appetizers</button>
+            <button class="filter-btn" data-category="main">Main Course</button>
+            <button class="filter-btn" data-category="dessert">Desserts</button>
+            <button class="filter-btn" data-category="beverage">Beverages</button>
+        </div>
+
+        <!-- AI Recommendations -->
+        <div id="recommendations" class="recommendations" style="display: none;">
+            <h2>🤖 AI Recommendations</h2>
+            <div id="recommendations-content" class="menu-grid"></div>
+        </div>
+
+        <!-- Menu Items -->
+        <div class="menu-section">
+            <h2>Our Menu</h2>
+            <div id="menu-items" class="menu-grid">
+                <div class="loading">Loading menu...</div>
+            </div>
+        </div>
+
+        <!-- Shopping Cart -->
+        <div id="cart" class="cart">
+            <h2>🛒 Your Cart</h2>
+            <div id="cart-items" class="cart-items">
+                <p class="empty-cart">Your cart is empty</p>
+            </div>
+            <div id="cart-summary" class="cart-summary" style="display: none;">
+                <div class="cart-total">
+                    <strong>Total:</strong>
+                    <span id="cart-total">$0.00</span>
+                </div>
+                <button id="checkout-btn" class="btn btn-primary">Checkout</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Checkout</h2>
+            <form id="checkout-form">
+                <div class="form-group">
+                    <label for="customer-name">Name:</label>
+                    <input type="text" id="customer-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="customer-email">Email:</label>
+                    <input type="email" id="customer-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="order-notes">Special Instructions (optional):</label>
+                    <textarea id="order-notes" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <strong>Total: <span id="checkout-total">$0.00</span></strong>
+                </div>
+                <button type="submit" class="btn btn-primary">Place Order</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>✅ Order Placed Successfully!</h2>
+            <p>Your order has been received. We'll send you an email confirmation shortly.</p>
+            <p>Order ID: <strong id="order-id"></strong></p>
+            <button class="btn btn-primary" onclick="location.reload()">New Order</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Restro. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>
