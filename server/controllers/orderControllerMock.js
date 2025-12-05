@@ -1,5 +1,4 @@
-const Order = require('../models/Order');
-const MenuItem = require('../models/MenuItem');
+const mockData = require('../mockData');
 
 // Create new order
 exports.createOrder = async (req, res) => {
@@ -32,12 +31,15 @@ exports.createOrder = async (req, res) => {
       }
     }
 
+    // Create a Map for O(1) lookup of menu items
+    const menuItemsMap = new Map(mockData.menuItems.map(item => [item._id, item]));
+
     // Calculate total and validate items
     let totalAmount = 0;
     const orderItems = [];
 
     for (const item of items) {
-      const menuItem = await MenuItem.findById(item.menuItem);
+      const menuItem = menuItemsMap.get(item.menuItem);
       if (!menuItem) {
         return res.status(404).json({ error: `Menu item ${item.menuItem} not found` });
       }
@@ -49,24 +51,26 @@ exports.createOrder = async (req, res) => {
       totalAmount += itemTotal;
 
       orderItems.push({
-        menuItem: menuItem._id,
+        menuItem: { ...menuItem },
         quantity: item.quantity,
         price: menuItem.price
       });
     }
 
     // Create order
-    const order = new Order({
+    const order = {
+      _id: mockData.getNextOrderId(),
       items: orderItems,
       totalAmount,
       customerName: customerName.trim(),
       customerEmail: customerEmail.trim().toLowerCase(),
-      notes: notes ? notes.substring(0, 500) : '' // Limit notes length
-    });
+      notes: notes ? notes.substring(0, 500) : '', // Limit notes length
+      status: 'pending',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
 
-    await order.save();
-    await order.populate('items.menuItem');
-
+    mockData.orders.push(order);
     res.status(201).json(order);
   } catch (error) {
     res.status(400).json({ error: 'Failed to create order', message: error.message });
@@ -77,10 +81,15 @@ exports.createOrder = async (req, res) => {
 exports.getAllOrders = async (req, res) => {
   try {
     const { status } = req.query;
-    const filter = status ? { status } : {};
-    const orders = await Order.find(filter)
-      .populate('items.menuItem')
-      .sort({ createdAt: -1 });
+    let orders = mockData.orders;
+    
+    if (status) {
+      orders = orders.filter(order => order.status === status);
+    }
+    
+    // Sort by most recent first
+    orders = orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    
     res.json(orders);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch orders', message: error.message });
@@ -90,7 +99,7 @@ exports.getAllOrders = async (req, res) => {
 // Get order by ID
 exports.getOrderById = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id).populate('items.menuItem');
+    const order = mockData.orders.find(o => o._id === req.params.id);
     if (!order) {
       return res.status(404).json({ error: 'Order not found' });
     }
@@ -110,17 +119,15 @@ exports.updateOrderStatus = async (req, res) => {
       return res.status(400).json({ error: 'Invalid status' });
     }
 
-    const order = await Order.findByIdAndUpdate(
-      req.params.id,
-      { status },
-      { new: true }
-    ).populate('items.menuItem');
-
-    if (!order) {
+    const index = mockData.orders.findIndex(o => o._id === req.params.id);
+    if (index === -1) {
       return res.status(404).json({ error: 'Order not found' });
     }
 
-    res.json(order);
+    mockData.orders[index].status = status;
+    mockData.orders[index].updatedAt = new Date();
+
+    res.json(mockData.orders[index]);
   } catch (error) {
     res.status(400).json({ error: 'Failed to update order status', message: error.message });
   }

@@ -49,7 +49,22 @@ cd restro
 npm install
 ```
 
-3. Set up environment variables:
+3. **Choose your setup mode:**
+
+### Option A: Demo Mode (No MongoDB Required)
+Perfect for quick testing and demonstrations.
+
+```bash
+# Start the demo server with in-memory data
+npm run demo
+
+# Or with auto-reload
+npm run dev:demo
+```
+
+### Option B: Full Setup with MongoDB
+
+1. Set up environment variables:
 ```bash
 cp .env.example .env
 ```
@@ -61,17 +76,17 @@ MONGODB_URI=mongodb://localhost:27017/restro
 NODE_ENV=development
 ```
 
-4. Start MongoDB (if running locally):
+2. Start MongoDB (if running locally):
 ```bash
 mongod
 ```
 
-5. Seed the database with sample data:
+3. Seed the database with sample data:
 ```bash
 npm run seed
 ```
 
-6. Start the server:
+4. Start the server:
 ```bash
 # Development mode with auto-reload
 npm run dev
@@ -80,7 +95,7 @@ npm run dev
 npm start
 ```
 
-7. Access the application:
+4. Access the application:
 - Customer Interface: http://localhost:3000
 - Admin Dashboard: http://localhost:3000/admin
 
@@ -163,20 +178,34 @@ The AI recommendation system suggests popular items based on the selected catego
 ## Error Handling
 
 The application includes comprehensive error handling:
-- Input validation on both client and server
+- Input validation on both client and server (email format, quantity limits, XSS prevention)
 - Database connection error handling
 - API error responses with appropriate status codes
 - User-friendly error messages
+- Sanitized inputs to prevent injection attacks
 
 ## Security Considerations
 
-For production deployment, consider adding:
-- Authentication and authorization (JWT tokens)
-- Input sanitization to prevent XSS attacks
-- Rate limiting for API endpoints
-- HTTPS/SSL certificates
-- Environment-based configuration
-- Admin authentication for protected routes
+**⚠️ IMPORTANT: This is a demonstration application. Before deploying to production:**
+
+Current security implementations:
+- ✅ Input validation (email format, length limits)
+- ✅ XSS prevention (HTML tag filtering in inputs)
+- ✅ Quantity validation (1-99 limit)
+- ✅ Notes length limiting (500 characters)
+- ✅ Email sanitization (trimming, lowercase)
+
+**Required for production:**
+- ❌ **Authentication and authorization** - Admin routes are currently unprotected
+- ❌ **JWT tokens or session management** - No user authentication implemented
+- ❌ **Rate limiting** - API endpoints can be abused without limits
+- ❌ **HTTPS/SSL certificates** - Deploy with secure connections
+- ❌ **CORS configuration** - Currently allows all origins
+- ❌ **Database access controls** - Secure MongoDB with authentication
+- ❌ **Environment variable protection** - Use proper secrets management
+- ❌ **Input sanitization library** - Consider using libraries like DOMPurify or validator.js
+- ❌ **SQL/NoSQL injection prevention** - While using Mongoose helps, add additional validation
+- ❌ **CSRF protection** - Add CSRF tokens for state-changing operations
 
 ## Future Enhancements
 
