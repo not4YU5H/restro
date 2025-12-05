@@ -1,0 +1,27 @@
+{
+  "name": "restro",
+  "version": "1.0.0",
+  "description": "Restaurant ordering and menu management system",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "demo": "node server-demo.js",
+    "dev": "nodemon server.js",
+    "dev:demo": "nodemon server-demo.js",
+    "seed": "node seed.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^2.2.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "mongoose": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}

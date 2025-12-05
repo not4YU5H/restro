@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restro Admin - Menu & Orders Management</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🍽️ Restro Admin</h1>
+            <p class="tagline">Manage your menu and orders</p>
+            <nav>
+                <a href="/">Customer View</a>
+                <a href="/admin" class="active">Admin</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="admin-tabs">
+            <button class="tab-btn active" data-tab="menu">Menu Management</button>
+            <button class="tab-btn" data-tab="orders">Order History</button>
+        </div>
+
+        <!-- Menu Management Tab -->
+        <div id="menu-tab" class="tab-content active">
+            <div class="admin-header">
+                <h2>Menu Items</h2>
+                <button id="add-item-btn" class="btn btn-primary">+ Add New Item</button>
+            </div>
+            <div id="admin-menu-items" class="admin-table">
+                <div class="loading">Loading menu items...</div>
+            </div>
+        </div>
+
+        <!-- Orders Tab -->
+        <div id="orders-tab" class="tab-content">
+            <div class="admin-header">
+                <h2>Order History</h2>
+                <div class="filter-group">
+                    <label>Filter by status:</label>
+                    <select id="order-status-filter">
+                        <option value="">All Orders</option>
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="preparing">Preparing</option>
+                        <option value="ready">Ready</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+            </div>
+            <div id="admin-orders" class="admin-table">
+                <div class="loading">Loading orders...</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add/Edit Menu Item Modal -->
+    <div id="menu-item-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="menu-modal-title">Add Menu Item</h2>
+            <form id="menu-item-form">
+                <input type="hidden" id="item-id">
+                <div class="form-group">
+                    <label for="item-name">Name:</label>
+                    <input type="text" id="item-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="item-description">Description:</label>
+                    <textarea id="item-description" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="item-price">Price ($):</label>
+                    <input type="number" id="item-price" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="item-category">Category:</label>
+                    <select id="item-category" required>
+                        <option value="appetizer">Appetizer</option>
+                        <option value="main">Main Course</option>
+                        <option value="dessert">Dessert</option>
+                        <option value="beverage">Beverage</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="item-image">Image URL (optional):</label>
+                    <input type="text" id="item-image">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="item-available" checked>
+                        Available
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div id="order-details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Order Details</h2>
+            <div id="order-details-content"></div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Restro Admin. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="/js/admin.js"></script>
+</body>
+</html>
